@@ -6,6 +6,10 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher.filters.state import StatesGroup, State, default_state
 from dotenv import load_dotenv
 
+from data import db_session
+from data.users import User
+from db_operations import add_user_if_not_in_base
+
 load_dotenv()
 BOT_TOKEN = os.environ.get('TOKEN')
 
@@ -26,12 +30,15 @@ async def start(message: types.Message):
                          'туристам и жителям нашего города найти место для развлечения, маршрут,'
                          ' посмотреть афишу и многое другое')
 
+    add_user_if_not_in_base(message.from_user.id, message.from_user.first_name, message.from_user.last_name)
+
     do_want = ['Афиша',
                'Туристические объекты',
                'Организации',
                'Маршруты']
     keyboard = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
     keyboard.add(*do_want)
+
     await message.answer('Какая информация Вас интересует?', reply_markup=keyboard)
 
 
@@ -40,6 +47,11 @@ async def tourists_places(message: types.Message):
     pass
 
 
-if __name__ == "__main__":
+def main():
     # Запуск бота
+    db_session.global_init('db/users.db')
     executor.start_polling(dp, skip_updates=True)
+
+
+if __name__ == "__main__":
+    main()
