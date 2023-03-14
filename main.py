@@ -34,18 +34,24 @@ async def start(message: types.Message):
     add_user_if_not_in_base(message.from_user.id, message.from_user.first_name, message.from_user.last_name)
 
     do_want = ['Афиша',
-               'Туристические объекты',
+               'Места на открытом воздухе',
                'Организации',
                'Маршруты']
     keyboard = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
     keyboard.add(*do_want)
 
-    await message.answer('Какая информация Вас интересует?', reply_markup=keyboard)
+    await message.answer('Выберите интересующее Вас место развлечения:', reply_markup=keyboard)
 
 
-@dp.message_handler(text='Туристические объекты')
+@dp.message_handler(text='Организации')
 async def tourists_places(message: types.Message):
-    pass
+    type_of_organisations = ['Кафе, рестораны',
+                             'Спортивные организации',
+                             'Другое']
+    keyboard = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+    keyboard.add(*type_of_organisations)
+
+    await message.answer('Какого типа организацию в бы хотели посетить?', reply_markup=keyboard)
 
 
 def main():
