@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 
 from data import db_session
 from data.users import User
+from data.rating import Rating
 from db_operations import add_user_if_not_in_base
 
 load_dotenv()
